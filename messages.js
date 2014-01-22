@@ -80,7 +80,7 @@ module.exports.private.wallet.fee = function (amount_int, currency) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'wallet'
+    private: 'wallet',
     wallet: {
       op: 'fee',
       amount: amount_int,
@@ -118,7 +118,7 @@ module.exports.private.user_order.pending = function (value_int, orderId) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'user_order'
+    private: 'user_order',
     user_order: {
       oid: orderId,
       currency: 'USD',
@@ -137,7 +137,7 @@ module.exports.private.user_order.executing = function (value_int, orderId) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'user_order'
+    private: 'user_order',
     user_order: {
       oid: orderId,
       currency: 'USD',
@@ -156,7 +156,7 @@ module.exports.private.user_order.post_pending = function (value_int, orderId) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'user_order'
+    private: 'user_order',
     user_order: {
       oid: orderId,
       currency: 'USD',
@@ -175,7 +175,7 @@ module.exports.private.user_order.open = function (value_int, orderId) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'user_order'
+    private: 'user_order',
     user_order: {
       oid: orderId,
       currency: 'USD',
@@ -194,7 +194,7 @@ module.exports.private.user_order.completed_passive = function (orderId) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'user_order'
+    private: 'user_order',
     user_order: {
       oid: orderId,
       reason: 'completed_passive'
@@ -206,7 +206,7 @@ module.exports.private.user_order.user_requested = function (orderId) {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
-    private: 'user_order'
+    private: 'user_order',
     user_order: {
       oid: orderId,
       reason: 'user_requested'
