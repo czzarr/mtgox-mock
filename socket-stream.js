@@ -44,9 +44,9 @@ module.exports = function (socket) {
           this.socket.volatile.emit('message', messages.private.wallet.spent(trade.amount_int));
           // TODO missing balance_int arg
           this.socket.volatile.emit('message', messages.private.wallet.fee(trade.amount_int, 'BTC'));
-          this.socket.volatile.emit('message', messages.private.trade.public(trade.amount_int));
-          this.socket.volatile.emit('message', messages.private.trade.private(trade.amount_int));
-          this.socket.volatile.emit('message', messages.private.user_order.open(0));
+          this.socket.volatile.emit('message', messages.private.trade.public(trade));
+          this.socket.volatile.emit('message', messages.private.trade.private(trade));
+          this.socket.volatile.emit('message', messages.private.user_order.open(trade));
           this.socket.volatile.emit('message', messages.private.user_order.completed_passive());
         }
         break;
