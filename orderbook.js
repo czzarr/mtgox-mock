@@ -54,7 +54,7 @@ Orderbook.prototype.cancel = function (orderId) {
 
 Orderbook.prototype.trade = function (trade) {
   if (trade.trade_type === 'bid') {
-    if (trade.price_int === this.ask.price_int) {
+    if (this.ask && trade.price_int === this.ask.price_int) {
       if (this.ask.volume_int <= trade.volume_int) {
         this.ask = null;
         // TODO
@@ -67,7 +67,7 @@ Orderbook.prototype.trade = function (trade) {
     }
   }
   if (trade.trade_type === 'ask') {
-    if (trade.price_int === this.bid.price_int) {
+    if (this.bid && trade.price_int === this.bid.price_int) {
       if (this.bid.volume_int <= trade.volume_int) {
         this.bid = null;
         // TODO
