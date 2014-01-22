@@ -1,7 +1,7 @@
 var io = require('socket.io-client');
 var config = require('./config');
 
-var conn = io.connect('http://localhost:3001');
+var conn = io.connect('http://localhost:3000');
 conn.on('connect', function () {
   console.log('We are connected to MockGox');
 });

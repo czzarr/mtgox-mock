@@ -1,14 +1,20 @@
 var MongoClient = require('mongodb').MongoClient;
-var io = require('socket.io').listen(3001);
+var express = require('express');
+var app = express()
+var server = require('http').Server(app)
+var io = require('socket.io').listen(server)
+server.listen(3000)
 var IntervalStream = require('interval-stream');
 var through = require('through');
-var express = require('express');
 var replify = require('replify')
 var config = require('./config');
 var messages = require('./messages');
 var orderbook = require('./orderbook')();
 var socketStream = require('./socket-stream');
 var is = new IntervalStream(1000, true);
+
+app.use(express.json())
+app.use(app.router)
 
 io.on('connection', function (socket) {
   var emitter = socketStream(socket);
@@ -32,10 +38,6 @@ io.on('connection', function (socket) {
   });
 });
 
-var app = express();
-app.use(express.json());
-app.use(app.router);
-var server = app.listen(3000);
 
 app.get('/test', function (req, res) {
   res.send(200, 'test worked');
