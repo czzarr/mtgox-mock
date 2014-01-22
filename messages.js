@@ -1,4 +1,4 @@
-var mtgoxApiUtil = require('mtgox-api-util');
+var mtgoxApiUtil = require('./mtgox-api-util');
 var config = require('./config');
 
 module.exports.subscribe = function (channel) { return { op: 'subscribe', channel: channel }; };
