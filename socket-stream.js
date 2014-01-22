@@ -5,19 +5,18 @@ var messages = require('./messages');
 module.exports = function (socket) {
   util.inherits(SocketStream, Writable);
   function SocketStream (socket) {
-    Writable.call(this);
+    Writable.call(this, { objectMode: true });
     this.socket = socket;
   }
   var ss = new SocketStream(socket);
   ss._write = function (chunk, encoding, done) {
     switch (chunk.type) {
-      // TODO make sure all the arguments for messages are present
       case 'add':
-        this.socket.volatile.emit('message', messages.private.user_order.pending(amount));
-        this.socket.volatile.emit('message', messages.private.user_order.executing(amount));
-        this.socket.volatile.emit('message', messages.private.user_order.post_pending(amount));
-        this.socket.volatile.emit('message', messages.private.user_order.open(amount));
-        this.socket.volatile.emit('message', messages.private.user_order.open(amount));
+        this.socket.volatile.emit('message', messages.private.user_order.pending(chunk.order));
+        this.socket.volatile.emit('message', messages.private.user_order.executing(chunk.order));
+        this.socket.volatile.emit('message', messages.private.user_order.post_pending(chunk.order));
+        this.socket.volatile.emit('message', messages.private.user_order.open(chunk.order));
+        this.socket.volatile.emit('message', messages.private.user_order.open(chunk.order));
         break;
       case 'cancel':
         this.socket.volatile.emit('message', messages.private.user_order.user_requested(orderId));

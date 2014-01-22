@@ -15,10 +15,10 @@ module.exports.private.wallet.in = function (amount_int) {
     private: 'wallet',
     wallet: {
       op: 'in',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
+      amount: mtgoxApiUtil.btcAmount(amount_int),
       //info: 'BTC bought: [tid:1373975198892772] 0.01000000 BTC at $98.20000',
       ref: null,
-      balance: mtgoxApiUtil.btcAmount(options.balance_int)
+      //balance: mtgoxApiUtil.btcAmount(options.balance_int)
     }
   };
 };
@@ -30,10 +30,10 @@ module.exports.private.wallet.spent = function (amount_int) {
     private: 'wallet',
     wallet: {
       op: 'spent',
-      amount: mtgoxApiUtil.usdAmount(options.amount_int),
+      amount: mtgoxApiUtil.usdAmount(amount_int),
       //info: 'BTC bought: [tid:1373975198892772] 0.01000000 BTC at $98.20000',
       ref: null,
-      balance: mtgoxApiUtil.usdAmount(options.balance_int)
+      //balance: mtgoxApiUtil.usdAmount(options.balance_int)
     }
   };
 };
@@ -45,10 +45,10 @@ module.exports.private.wallet.out = function (amount_int) {
     private: 'wallet',
     wallet: {
       op: 'out',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
+      amount: mtgoxApiUtil.btcAmount(amount_int),
       //info: 'BTC sold: [tid:1373975366587376] 0.01000000 BTC at $98.50000',
       ref: null,
-      balance: mtgoxApiUtil.btcAmount(options.balance_int)
+      //balance: mtgoxApiUtil.btcAmount(options.balance_int)
     }
   };
 };
@@ -60,21 +60,21 @@ module.exports.private.wallet.earned = function (amount_int) {
     private: 'wallet',
     wallet: {
       op: 'earned',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
+      amount: mtgoxApiUtil.btcAmount(amount_int),
       //info: 'BTC sold: [tid:1373975366587376] 0.01000000 BTC at $98.50000',
       ref: null,
-      balance: mtgoxApiUtil.btcAmount(options.balance_int)
+      //balance: mtgoxApiUtil.btcAmount(options.balance_int)
     }
   };
 };
 module.exports.private.wallet.fee = function (amount_int, currency) {
   if (currency === 'BTC') {
-    var amount = mtgoxApiUtil.btcAmount(options.amount_int);
-    var balance = mtgoxApiUtil.btcAmount(options.balance_int);
+    var amount = mtgoxApiUtil.btcAmount(amount_int);
+    //var balance = mtgoxApiUtil.btcAmount(options.balance_int);
   }
   if (currency === 'USD') {
-    var amount = mtgoxApiUtil.usdAmount(options.amount_int);
-    var balance = mtgoxApiUtil.usdAmount(options.balance_int);
+    var amount = mtgoxApiUtil.usdAmount(amount_int);
+    //var balance = mtgoxApiUtil.usdAmount(options.balance_int);
   }
   return {
     channel: config.MTGOX_PRIVATE_CHANNEL,
@@ -86,7 +86,7 @@ module.exports.private.wallet.fee = function (amount_int, currency) {
       amount: amount_int,
       //info: 'BTC sold: [tid:1373975366587376] 0.01000000 BTC at $98.50000',
       ref: null,
-      balance: balance_int
+      //balance: balance_int
     }
   };
 };
@@ -112,27 +112,26 @@ module.exports.private.trade.private = function (trade) {
 };
 
 module.exports.private.user_order = {};
-// TODO date, price, effective_amount, orderId
-module.exports.private.user_order.pending = function (value_int, orderId) {
+module.exports.private.user_order.pending = function (order) {
   return {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
     private: 'user_order',
     user_order: {
-      oid: orderId,
+      oid: order.oid,
       currency: 'USD',
       status: 'pending',
-      type: 'bid',
+      type: order.type,
       item: 'BTC',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      effective_amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      date: Date.now(),
-      price: mtgoxApiUtil.usdAmount(options.price_int)
+      amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      effective_amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      date: order.date,
+      price: mtgoxApiUtil.usdAmount(order.price_int)
     }
   };
 };
-module.exports.private.user_order.executing = function (value_int, orderId) {
+module.exports.private.user_order.executing = function (order) {
   return {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
@@ -144,48 +143,48 @@ module.exports.private.user_order.executing = function (value_int, orderId) {
       status: 'executing',
       type: 'bid',
       item: 'BTC',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      effective_amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      date: Date.now(),
-      price: mtgoxApiUtil.usdAmount(options.price_int)
+      amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      effective_amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      date: order.date,
+      price: mtgoxApiUtil.usdAmount(order.price_int)
     }
   };
 };
-module.exports.private.user_order.post_pending = function (value_int, orderId) {
+module.exports.private.user_order.post_pending = function (order) {
   return {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
     private: 'user_order',
     user_order: {
-      oid: orderId,
+      oid: order.oid,
       currency: 'USD',
       status: 'post-pending',
       type: 'bid',
       item: 'BTC',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      effective_amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      date: Date.now(),
-      price: mtgoxApiUtil.usdAmount(options.price_int)
+      amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      effective_amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      date: order.date,
+      price: mtgoxApiUtil.usdAmount(order.price_int)
     }
   };
 };
-module.exports.private.user_order.open = function (value_int, orderId) {
+module.exports.private.user_order.open = function (order) {
   return {
     channel: config.MTGOX_PRIVATE_CHANNEL,
     op: 'private',
     origin: 'broadcast',
     private: 'user_order',
     user_order: {
-      oid: orderId,
+      oid: order.oid,
       currency: 'USD',
       status: 'open',
       type: 'bid',
       item: 'BTC',
-      amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      effective_amount: mtgoxApiUtil.btcAmount(options.amount_int),
-      date: Date.now(),
-      price: mtgoxApiUtil.usdAmount(options.price_int)
+      amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      effective_amount: mtgoxApiUtil.btcAmount(order.amount_int),
+      date: order.date,
+      price: mtgoxApiUtil.usdAmount(order.price_int)
     }
   };
 };
