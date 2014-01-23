@@ -52,23 +52,48 @@ module.exports = function () {
     if (trade.trade_type === 'bid') {
       if (this.ask && trade.price_int === this.ask.price_int) {
         if (this.ask.amount_int <= trade.amount_int) {
+          var res = { 
+            result: 'order_completed', 
+            trade: trade, 
+            type: 'trade', 
+            order: this.ask
+          };
+          res.order.amount_int = '0'
           this.ask = null;
-          return { result: 'order_completed', trade: trade, type: 'trade', orderId: this.ask.oid };
+          return res
         } else {
           this.ask.amount_int -= trade.amount_int;
-          return { result: 'order_partially_filled', trade: trade, type: 'trade', orderId: this.ask.oid };
+          this.ask.amount_int = this.ask.amount_int.toString()
+          return { 
+            result: 'order_partially_filled', 
+            trade: trade, 
+            type: 'trade', 
+            order: this.ask
+          };
         }
       }
     }
     if (trade.trade_type === 'ask') {
       if (this.bid && trade.price_int === this.bid.price_int) {
         if (parseInt(this.bid.amount_int, 10) <= parseInt(trade.amount_int, 10)) {
-          var res = { result: 'order_completed', trade: trade, type: 'trade', orderId: this.bid.oid };
+          var res = { 
+            result: 'order_completed', 
+            trade: trade, 
+            type: 'trade', 
+            order: this.bid
+          };
+          res.order.amount_int = '0'
           this.bid = null;
           return res;
         } else {
           this.bid.amount_int -= trade.amount_int;
-          return { result: 'order_partially_filled', trade: trade, type: 'trade', orderId: this.bid.oid };
+          this.bid.amount_int = this.bid.amount_int.toString()
+          return { 
+            result: 'order_partially_filled', 
+            trade: trade, 
+            type: 'trade', 
+            order: this.bid
+          };
         }
       }
     }

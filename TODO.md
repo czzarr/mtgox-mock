@@ -1,7 +1,10 @@
 code add an order in orderbook from the client (fisher algo) to the server
-  see what's in an order
-  finish the messaging
-
-
 clean up config/currency/mtgox-api-utils
 make a balance/account module
+make an order module
+write tests
+refactor and clean up code, use through2
+use real auth
+make a real orderbook with multiple possible orders at same price and
+depths
+proxy mtgox' orderbook
