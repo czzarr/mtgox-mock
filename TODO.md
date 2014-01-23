@@ -1,3 +1,4 @@
+use bignum and fix mess of ints/strings
 code add an order in orderbook from the client (fisher algo) to the server
 clean up config/currency/mtgox-api-utils
 make a balance/account module

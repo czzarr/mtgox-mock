@@ -26,7 +26,8 @@
     "interval-stream": "~0.1.2",
     "JSONStream": "~0.7.1",
     "socket.io": "~0.9.16",
-    "express": "~3.4.8"
+    "express": "~3.4.8",
+    "bignum": "~0.6.2"
   },
   "devDependencies": {}
 }
