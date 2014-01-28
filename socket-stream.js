@@ -25,20 +25,26 @@ module.exports = function (socket) {
       case 'trade':
         var trade = chunk.trade
         var order = chunk.order
-        if (trade.trade_type === 'bid') {
-          this.socket.volatile.emit('message', messages.private.wallet.out(trade.amount_int));
-          this.socket.volatile.emit('message', messages.private.wallet.earned(trade.amount_int));
-          this.socket.volatile.emit('message', messages.private.wallet.fee(trade.amount_int, trade.price_currency));
+        // if it's a public trade that doesn't hit us order will be
+        // undefined
+        if (order) {
+          if (trade.trade_type === 'bid') {
+            this.socket.volatile.emit('message', messages.private.wallet.out(trade.amount_int));
+            this.socket.volatile.emit('message', messages.private.wallet.earned(trade.amount_int));
+            this.socket.volatile.emit('message', messages.private.wallet.fee(trade.amount_int, trade.price_currency));
+          }
+          if (trade.trade_type === 'ask') {
+            this.socket.volatile.emit('message', messages.private.wallet.in(trade.amount_int));
+            this.socket.volatile.emit('message', messages.private.wallet.spent(trade.amount_int));
+            this.socket.volatile.emit('message', messages.private.wallet.fee(trade.amount_int, 'BTC'));
+          }
+          this.socket.volatile.emit('message', messages.private.trade.public(trade));
+          this.socket.volatile.emit('message', messages.private.trade.private(trade));
+          this.socket.volatile.emit('message', messages.private.user_order.open(order));
+          if (order.amount_int === '0') this.socket.volatile.emit('message', messages.private.user_order.completed_passive(order.oid));
+        } else {
+          this.socket.volatile.emit('message', messages.private.trade.public(trade));
         }
-        if (trade.trade_type === 'ask') {
-          this.socket.volatile.emit('message', messages.private.wallet.in(trade.amount_int));
-          this.socket.volatile.emit('message', messages.private.wallet.spent(trade.amount_int));
-          this.socket.volatile.emit('message', messages.private.wallet.fee(trade.amount_int, 'BTC'));
-        }
-        this.socket.volatile.emit('message', messages.private.trade.public(trade));
-        this.socket.volatile.emit('message', messages.private.trade.private(trade));
-        this.socket.volatile.emit('message', messages.private.user_order.open(order));
-        if (order.amount_int === '0') this.socket.volatile.emit('message', messages.private.user_order.completed_passive(order.oid));
         break;
     }
     done();

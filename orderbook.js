@@ -97,6 +97,10 @@ module.exports = function () {
         }
       }
     }
+    return {
+      trade: trade,
+      type: 'trade'
+    }
   }
 
   return new Orderbook()

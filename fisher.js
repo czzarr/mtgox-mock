@@ -25,8 +25,8 @@ function Fisher (options) {
   this.waiting = false;
   this.count = 0;
 
-  this.best_bid = options.buy;
-  this.best_ask = options.sell;
+  this.best_bid = options.bestBid;
+  this.best_ask = options.bestAsk;
 
   this.balance = options.balance;
   this.fee = options.fee;

@@ -23,7 +23,9 @@ io.on('connection', function (socket) {
       .pipe(through(function (chunk) {
         this.queue({ trade: chunk, type: 'trade' });
       }))
-      .pipe(is(1000, { objectMode: true })).pipe(orderbook).pipe(emitter);
+      .pipe(is(1000, { objectMode: true }))
+      .pipe(orderbook)
+      .pipe(emitter);
   });
   socket.on('message', function (data) {
     switch (data.op) {
