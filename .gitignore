@@ -1,4 +1,4 @@
 node_modules/*
 *.swp
 *.swo
-npm_debug.log
+*.log
