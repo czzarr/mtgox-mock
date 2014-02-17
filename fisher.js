@@ -38,14 +38,18 @@ function Fisher (options) {
 
 Fisher.prototype._transform = function (chunk, encoding, done) {
   var message = this.processMessage(chunk);
-  log.info({ msg: message });
+  //log.info({ msg: message });
   if (message.type) {
+    console.log('====type====', message.type);
     var sig;
+    console.log('====state====', this.state);
     switch (this.state) {
       case 0:
         // TODO move this case up so that we don't wait for a trade
         this.bid = this.getFisherOrder('bid');
         this.ask = this.getFisherOrder('ask');
+        console.log(this.bid);
+        console.log(this.ask);
         sig = { bid: this.bid, ask: this.ask };
         this.state = 1;
         break;

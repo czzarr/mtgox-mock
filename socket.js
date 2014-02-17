@@ -18,12 +18,12 @@ app.use(app.router)
 io.on('connection', function (socket) {
   var emitter = socketStream(socket);
   MongoClient.connect("mongodb://localhost:27017/mtgox", function(err, db) {
-    var trades = db.collection('trades').find().stream();
+    var trades = db.collection('trades').find().skip(3925).stream();
     trades
       .pipe(through(function (chunk) {
         this.queue({ trade: chunk, type: 'trade' });
       }))
-      .pipe(is(1000, { objectMode: true }))
+      .pipe(is(500, { objectMode: true }))
       .pipe(orderbook)
       .pipe(emitter);
   });
