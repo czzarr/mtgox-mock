@@ -138,7 +138,7 @@ module.exports.private.user_order.executing = function (order) {
     origin: 'broadcast',
     private: 'user_order',
     user_order: {
-      oid: orderId,
+      oid: order.oid,
       currency: 'USD',
       status: 'executing',
       type: 'bid',

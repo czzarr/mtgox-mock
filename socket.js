@@ -1,19 +1,18 @@
 var MongoClient = require('mongodb').MongoClient;
 var express = require('express');
 var app = express()
+app.use(express.bodyParser())
+app.use(app.router)
 var server = require('http').Server(app)
 var io = require('socket.io').listen(server)
 server.listen(3000)
 var is = require('interval-stream');
 var through = require('through');
-var replify = require('replify')
 var config = require('./config');
 var messages = require('./messages');
 var orderbook = require('./orderbook')();
 var socketStream = require('./socket-stream');
 
-app.use(express.json())
-app.use(app.router)
 
 io.on('connection', function (socket) {
   var emitter = socketStream(socket);

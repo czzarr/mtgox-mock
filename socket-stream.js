@@ -20,7 +20,7 @@ module.exports = function (socket) {
         this.socket.volatile.emit('message', messages.private.user_order.open(order));
         break;
       case 'cancel':
-        this.socket.volatile.emit('message', messages.private.user_order.user_requested(orderId));
+        this.socket.volatile.emit('message', messages.private.user_order.user_requested(chunk.orderId));
         break;
       case 'trade':
         var trade = chunk.trade
