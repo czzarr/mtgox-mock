@@ -1,11 +1,11 @@
 var goxStream = require('./client')
 var fisher = require('./fisher')
 var engine = require('./engine')
- //check if these should be strings or ints
- //then fix this fucking mess with bignum
+var usdMultiple = require('./config').usdMultiple
+
 var options = {
-  bestBid: 100,
-  bestAsk: 101
+  bestBid: 100 * usdMultiple,
+  bestAsk: 101 * usdMultiple
 }
 
 goxStream

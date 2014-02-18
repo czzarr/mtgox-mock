@@ -21,6 +21,8 @@ io.on('connection', function (socket) {
     var trades = db.collection('trades').find().skip(3925).stream();
     trades
       .pipe(through(function (chunk) {
+        chunk.price_int = parseInt(price_int, 10)
+        chunk.amount_int = parseInt(amount_int, 10)
         this.queue({ trade: chunk, type: 'trade' });
       }))
       .pipe(is(500, { objectMode: true }))
@@ -46,8 +48,8 @@ app.get('/test', function (req, res) {
 
 app.post('/money/order/add', function (req, res) {
   var order = {
-    amount_int: req.body.amount_int,
-    price_int: req.body.price_int,
+    amount_int: parseInt(req.body.amount_int, 10),
+    price_int: parseInt(req.body.price_int, 10),
     type: req.body.type,
     oid: Math.floor(Math.random()*10000),
     date: Date.now()
