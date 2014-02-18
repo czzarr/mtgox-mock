@@ -4,8 +4,8 @@ var engine = require('./engine')
 var usdMultiple = require('./config').usdMultiple
 
 var options = {
-  bestBid: 100 * usdMultiple,
-  bestAsk: 101 * usdMultiple
+  bestBid: 99 * usdMultiple,
+  bestAsk: 100 * usdMultiple
 }
 
 goxStream

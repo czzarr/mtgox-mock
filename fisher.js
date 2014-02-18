@@ -1,6 +1,6 @@
 var stream = require('stream');
 var log = require('./logger');
-var currency = require('mtgox-currency');
+var usdMultiple = require('./config').usdMultiple;
 
 module.exports = createFisherStream;
 
@@ -14,12 +14,12 @@ function Fisher (options) {
   stream.Transform.call(this, { objectMode: true });
 
   // algorithm parameters
-  this._aimAmount = 0.1;
+  this._aimAmount = 0.1 * usdMultiple;
   this._giveAway = 0.0039;
-  this._limitPriceTolerance = 0.1 * this._profitAim;
   this._lossStep = 0.033;
-  this._profitAim = this._profitStep - this._giveAway;
   this._profitStep = 0.02;
+  this._profitAim = this._profitStep - this._giveAway; // 0.0161
+  this._limitPriceTolerance = 0.1 * this._profitAim; // 0.00161
 
   this.state = 0;
   this.waiting = false;
@@ -142,9 +142,9 @@ Fisher.prototype._transform = function (chunk, encoding, done) {
             break;
         }
         break;
+    }
     console.log('fisher sig', sig);
     if (sig) this.push(sig);
-    }
   }
   done();
 };
@@ -213,10 +213,10 @@ Fisher.prototype.processMessage = function (chunk) {
 Fisher.prototype.checkFisherPrice = function (type) {
   switch (type) {
     case 'ask':
-      return Math.abs(this.best_ask - this.ask.price_int) < currency.btcFloat2btcInt(this._limitPriceTolerance);
+      return Math.abs((this.best_ask - this.ask.price_int) / this.best_ask) < this._limitPriceTolerance;
       break;
     case 'bid':
-      return Math.abs(this.best_bid - this.bid.price_int) < currency.btcFloat2btcInt(this._limitPriceTolerance);
+      return Math.abs((this.best_bid - this.bid.price_int) / this.best_bid) < this._limitPriceTolerance;
       break;
   }
 };
@@ -234,15 +234,15 @@ Fisher.prototype.checkHedgePrice = function (type) {
 
 Fisher.prototype.getFisherPrice = function (type) {
   if (type === 'ask') {
-    return Math.ceil(this.best_bid * (1 - this._profitStep));
+    return Math.ceil(this.best_bid * (1 + this._profitStep));
   }
   if (type === 'bid') {
-    return Math.floor(this.best_ask * (1 + this._profitStep));
+    return Math.floor(this.best_ask * (1 - this._profitStep));
   }
 };
 
 Fisher.prototype.getFisherOrder = function (type) {
-  return { type: type, amount_int: currency.btcFloat2btcInt(this._aimAmount), price_int: this.getFisherPrice(type) };
+  return { type: type, amount_int: this._aimAmount, price_int: this.getFisherPrice(type) };
 };
 
 Fisher.prototype.getHedgePrice = function (type) {

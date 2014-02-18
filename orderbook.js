@@ -50,7 +50,11 @@ module.exports = function () {
 
   Orderbook.prototype.trade = function (trade) {
     if (trade.trade_type === 'bid') {
-      if (this.ask && trade.price_int === this.ask.price_int) {
+      console.log('====BID====');
+      console.log(trade.price_int);
+      if (this.ask) console.log(this.ask.price_int);
+      if (this.ask && trade.price_int >= this.ask.price_int) {
+        console.log('====price=====', trade.price_int >= this.ask.price_int);
         if (this.ask.amount_int <= trade.amount_int) {
           var res = { 
             result: 'order_completed', 
@@ -63,7 +67,6 @@ module.exports = function () {
           return res
         } else {
           this.ask.amount_int -= trade.amount_int;
-          this.ask.amount_int = this.ask.amount_int.toString()
           return { 
             result: 'order_partially_filled', 
             trade: trade, 
@@ -74,8 +77,8 @@ module.exports = function () {
       }
     }
     if (trade.trade_type === 'ask') {
-      if (this.bid && trade.price_int === this.bid.price_int) {
-        if (parseInt(this.bid.amount_int, 10) <= parseInt(trade.amount_int, 10)) {
+      if (this.bid && trade.price_int <= this.bid.price_int) {
+        if (this.bid.amount_int <= trade.amount_int) {
           var res = { 
             result: 'order_completed', 
             trade: trade, 
@@ -87,7 +90,6 @@ module.exports = function () {
           return res;
         } else {
           this.bid.amount_int -= trade.amount_int;
-          this.bid.amount_int = this.bid.amount_int.toString()
           return { 
             result: 'order_partially_filled', 
             trade: trade, 

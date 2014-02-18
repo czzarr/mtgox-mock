@@ -21,8 +21,8 @@ io.on('connection', function (socket) {
     var trades = db.collection('trades').find().skip(3925).stream();
     trades
       .pipe(through(function (chunk) {
-        chunk.price_int = parseInt(price_int, 10)
-        chunk.amount_int = parseInt(amount_int, 10)
+        chunk.price_int = parseInt(chunk.price_int, 10)
+        chunk.amount_int = parseInt(chunk.amount_int, 10)
         this.queue({ trade: chunk, type: 'trade' });
       }))
       .pipe(is(500, { objectMode: true }))
@@ -55,10 +55,10 @@ app.post('/money/order/add', function (req, res) {
     date: Date.now()
   };
   orderbook.add(order);
-  res.send(200, 'order added');
+  res.json(200, { message: 'order added' });
 });
 
 app.post('/money/order/cancel', function (req, res) {
   orderbook.cancel(req.body.oid);
-  res.send(200, 'order cancelled');
+  res.json(200, { message: 'order cancelled' });
 });
