@@ -3,13 +3,13 @@ var util = require('util');
 var messages = require('./messages');
 
 module.exports = function (socket) {
-  util.inherits(SocketStream, Writable);
-  function SocketStream (socket) {
+  util.inherits(SocketEmitter, Writable);
+  function SocketEmitter (socket) {
     Writable.call(this, { objectMode: true });
     this.socket = socket;
   }
-  var ss = new SocketStream(socket);
-  ss._write = function (chunk, encoding, done) {
+  var emitter = new SocketEmitter(socket);
+  emitter._write = function (chunk, encoding, done) {
     switch (chunk.type) {
       case 'add':
         var order = chunk.order
@@ -49,5 +49,5 @@ module.exports = function (socket) {
     }
     done();
   }
-  return ss;
+  return emitter;
 };

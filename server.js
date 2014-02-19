@@ -11,14 +11,13 @@ var through = require('through');
 var config = require('./config');
 var messages = require('./messages');
 var orderbook = require('./orderbook')();
-var socketEmitter = require('./socket-stream');
+var socketStream = require('./socket-stream');
 
 
 io.on('connection', function (socket) {
-  var emitter = socketEmitter(socket);
-  MongoClient.connect(config.mongo, function(err, db) {
-    // for now we stream trades from a db
-    var trades = db.collection('trades').find().stream();
+  var emitter = socketStream(socket);
+  MongoClient.connect("mongodb://localhost:27017/mtgox", function(err, db) {
+    var trades = db.collection('trades').find().skip(3925).stream();
     trades
       .pipe(through(function (chunk) {
         chunk.price_int = parseInt(chunk.price_int, 10)
@@ -39,6 +38,11 @@ io.on('connection', function (socket) {
         break;
     }
   });
+});
+
+
+app.get('/test', function (req, res) {
+  res.send(200, 'test worked');
 });
 
 app.post('/money/order/add', function (req, res) {
