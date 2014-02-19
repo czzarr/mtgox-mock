@@ -22,7 +22,7 @@
     "through": "~2.3.4",
     "interval-stream": "~0.1.2",
     "socket.io": "~0.9.16",
-    "express": "~3.4.8",
+    "express": "~3.4.8"
   },
   "devDependencies": {
     "bunyan": "~0.22.1"
